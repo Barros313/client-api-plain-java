@@ -10,10 +10,10 @@ public class DBConnection {
     private static Connection connection = null;
 
     static {
-        String url = "jdbc:postgres://localhost:5432/new_java_db";
+        String url = "jdbc:postgresql://localhost:5432/new_java_db";
         Properties props = new Properties();
         props.setProperty("user", "postgres");
-        props.setProperty("password", "postgres");
+        props.setProperty("password", "70104");
 
         try {
             connection = DriverManager.getConnection(url, props);
