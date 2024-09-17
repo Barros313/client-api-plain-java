@@ -9,7 +9,7 @@ public class CreateDB {
     static Connection connection = DBConnection.getConnection();
 
     public static void main(String[] args) {
-        String query = "CREATE TABLE IF NOT EXISTS clients (" +
+        String query = "CREATE TABLE IF NOT EXISTS client (" +
                 "id SERIAL PRIMARY KEY, " +
                 "name VARCHAR(60) NOT NULL, " +
                 "age INT NOT NULL);";
