@@ -99,7 +99,7 @@ public class RegisterHandler implements HttpHandler {
         }
 
         // Print success message to console
-        System.out.println("Cliend id: " + newClientId + " successfully added");
+        System.out.println("Client id: " + newClientId + " successfully added");
 
         // Print success message to response body
         String success = "Successfully added client";
