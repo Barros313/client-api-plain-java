@@ -12,6 +12,6 @@ public class ManualTest {
     public static void main(String[] args) throws SQLException {
         ClientOperations exec = new ClientOperations();
 
-
+        System.out.println(exec.getAllClients());
     }
 }
