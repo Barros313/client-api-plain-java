@@ -3,6 +3,7 @@ package com.barros;
 import com.barros.routes.FetchAllHandler;
 import com.barros.routes.FindHandler;
 import com.barros.routes.HelloHandler;
+import com.barros.routes.RegisterHandler;
 import com.sun.net.httpserver.HttpServer;
 
 import java.io.IOException;
@@ -15,6 +16,8 @@ public class Server {
         server.createContext("/hello", new HelloHandler());
         server.createContext("/clients", new FetchAllHandler());
         server.createContext("/client", new FindHandler());
+        server.createContext("/register", new RegisterHandler());
+
         server.setExecutor(null);
         server.start();
     }
