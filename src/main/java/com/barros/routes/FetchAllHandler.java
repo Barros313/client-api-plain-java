@@ -46,18 +46,38 @@ public class FetchAllHandler implements HttpHandler {
         }
 
         if (clients == null) {
-            // Not found error message
-            String nullClients = "Table clients empty";
+            // Set null message
+            String nullClients = "Error fetching list of clients";
 
-            // Send not found status code
+            // Send error status code
             exchange.getResponseHeaders().add("Content-Type", "plain/text");
-            exchange.sendResponseHeaders(404, nullClients.length());
+            exchange.sendResponseHeaders(500, nullClients.length());
 
             // Write error to body
             responseBody.write(nullClients.getBytes());
 
             // Print error to console
-            System.err.println(nullClients);
+            System.out.println(nullClients + ": List<Client> clients == null");
+
+            // End Program
+            responseBody.flush();
+            responseBody.close();
+            return;
+        }
+
+        if (clients.isEmpty()) {
+            // Not found error message
+            String emptyClientList = "Table clients empty";
+
+            // Send not found status code
+            exchange.getResponseHeaders().add("Content-Type", "plain/text");
+            exchange.sendResponseHeaders(404, emptyClientList.length());
+
+            // Write error to body
+            responseBody.write(emptyClientList.getBytes());
+
+            // Print error to console
+            System.err.println(emptyClientList);
 
             // End program
             responseBody.flush();
