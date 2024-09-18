@@ -46,6 +46,8 @@ public class FindHandler implements HttpHandler {
             System.err.println(nfeMessage + "\n" + exp.getMessage());
 
             // End program
+            responseBody.flush();
+            responseBody.close();
             return;
         }
 
@@ -72,6 +74,8 @@ public class FindHandler implements HttpHandler {
             System.err.println(sqlError + "\n" + e.getMessage());
 
             // End program
+            responseBody.flush();
+            responseBody.close();
             return;
         }
 
@@ -91,6 +95,8 @@ public class FindHandler implements HttpHandler {
             System.err.println(nullClient + "\n" + nullClient);
 
             // End program
+            responseBody.flush();
+            responseBody.close();
             return;
         }
 
