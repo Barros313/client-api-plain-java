@@ -1,22 +1,21 @@
 package com.barros;
 
 import java.sql.Connection;
-import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Properties;
 
 public class DBConnection {
     private static Connection connection = null;
 
     static {
-        String url = "jdbc:postgresql://localhost:5432/new_java_db";
-        Properties props = new Properties();
-        props.setProperty("user", "postgres");
-        props.setProperty("password", "70104");
+        Config config = new Config();
+
+        String url = config.getProperty("db.url");
+        String username = config.getProperty("db.username");
+        String password = config.getProperty("db.password");
 
         try {
-            connection = DriverManager.getConnection(url, props);
+            connection = DriverManager.getConnection(url, username, password);
         } catch (SQLException e) {
             System.err.println("Connection failed: " + e.getMessage());
         }
