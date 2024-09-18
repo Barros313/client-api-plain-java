@@ -13,7 +13,7 @@ public class DBConnection {
         String url = "jdbc:postgresql://localhost:5432/new_java_db";
         Properties props = new Properties();
         props.setProperty("user", "postgres");
-        props.setProperty("password", "701043122002");
+        props.setProperty("password", "70104");
 
         try {
             connection = DriverManager.getConnection(url, props);
