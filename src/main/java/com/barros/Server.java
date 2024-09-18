@@ -13,8 +13,8 @@ public class Server {
         HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
 
         server.createContext("/hello", new HelloHandler());
-        server.createContext("/", new FetchAllHandler());
-        server.createContext("/client/", new FindHandler());
+        server.createContext("/clients", new FetchAllHandler());
+        server.createContext("/client", new FindHandler());
         server.setExecutor(null);
         server.start();
     }
