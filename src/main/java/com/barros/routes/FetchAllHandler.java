@@ -15,28 +15,77 @@ import java.util.List;
 public class FetchAllHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
+        // Get instance of client operations
         ClientOperations op = new ClientOperations();
 
+        // Get response body
+        OutputStream responseBody = exchange.getResponseBody();
+
+        // Get list of clients
         List<Client> clients = null;
         try {
             clients = op.getAllClients();
         } catch (SQLException e) {
-            System.out.println("SQLException: " + e.getMessage());
+            // Define SQL Exception body text
+            String sqlExceptionMessage = "500: SQL Exception";
+
+            // Send server side error status code
+            exchange.getResponseHeaders().add("Content-Type", "plain/text");
+            exchange.sendResponseHeaders(500, sqlExceptionMessage.length());
+
+            // Write error to body
+            responseBody.write(sqlExceptionMessage.getBytes());
+
+            // Print exception to console
+            System.err.println(sqlExceptionMessage + "/n" + e.getMessage());
+
+            // End program
+            responseBody.flush();
+            responseBody.close();
+            return;
         }
 
-        if (clients == null) return;
+        if (clients == null) {
+            // Not found error message
+            String nullClients = "Table clients empty";
 
+            // Send not found status code
+            exchange.getResponseHeaders().add("Content-Type", "plain/text");
+            exchange.sendResponseHeaders(404, nullClients.length());
+
+            // Write error to body
+            responseBody.write(nullClients.getBytes());
+
+            // Print error to console
+            System.err.println(nullClients);
+
+            // End program
+            responseBody.flush();
+            responseBody.close();
+            return;
+        }
+
+        // Define String Builder to store JSON strings
         StringBuilder bodyPage = new StringBuilder();
+
+        // Write each JSON to bodyPage
         ObjectMapper mapper = new ObjectMapper();
         for (Client client : clients) {
             bodyPage.append(mapper.writeValueAsString(client)).append("\n");
         }
 
+        // Send success status code
         exchange.getResponseHeaders().add("Content-Type", "application/json");
         exchange.sendResponseHeaders(200, bodyPage.toString().getBytes().length);
 
-        OutputStream os = exchange.getResponseBody();
-        os.write(bodyPage.toString().getBytes());
-        os.close();
+        // Write response
+        responseBody.write(bodyPage.toString().getBytes());
+
+        // Print success message to console
+        System.out.println("/clients Success");
+
+        // End program
+        responseBody.flush();
+        responseBody.close();
     }
 }
