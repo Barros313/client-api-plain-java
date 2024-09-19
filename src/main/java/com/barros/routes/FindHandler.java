@@ -27,10 +27,10 @@ public class FindHandler implements HttpHandler {
         OutputStream responseBody = exchange.getResponseBody();
 
         // Get client Id through path part
-        int clientId = 0;
+        int clientId;
         try {
             // Get integer from url path
-            clientId = Integer.parseInt(pathParts[2]);
+            clientId = Integer.parseInt(pathParts[pathParts.length - 1]);
         } catch (NumberFormatException exp) {
             // Set bad request message
             String nfeMessage = "Bad request";
