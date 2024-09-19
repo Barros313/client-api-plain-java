@@ -17,10 +17,10 @@ import java.util.Scanner;
 public class RegisterHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        InputStream inputStream = exchange.getRequestBody();
+        InputStream requestBody = exchange.getRequestBody();
         OutputStream responseBody = exchange.getResponseBody();
         ObjectMapper mapper = new ObjectMapper();
-        Scanner scanner = new Scanner(inputStream);
+        Scanner scanner = new Scanner(requestBody);
         ClientOperations op = new ClientOperations();
 
         // Get body JSON input
@@ -78,7 +78,7 @@ public class RegisterHandler implements HttpHandler {
             return;
         }
 
-        int newClientId = 0;
+        int newClientId;
         try {
             newClientId = op.add(newClient);
         } catch (SQLException exp) {
@@ -109,6 +109,5 @@ public class RegisterHandler implements HttpHandler {
         // End
         responseBody.flush();
         responseBody.close();
-        return;
     }
 }
