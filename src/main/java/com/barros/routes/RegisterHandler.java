@@ -46,7 +46,7 @@ public class RegisterHandler implements HttpHandler {
             System.err.println(nsee.getMessage());
 
             // Print error message
-            String errorMessage = "Empty data";
+            String errorMessage = "Empty body";
             exchange.getResponseHeaders().add("Content-Type", "plain/text");
             exchange.sendResponseHeaders(400, errorMessage.length());
             responseBody.write(errorMessage.getBytes());
@@ -67,7 +67,7 @@ public class RegisterHandler implements HttpHandler {
             System.err.println(e.getMessage());
 
             // Print error message
-            String errorMessage = "Not a valid JSON object";
+            String errorMessage = "Not a valid JSON document";
             exchange.getResponseHeaders().add("Content-Type", "plain/text");
             exchange.sendResponseHeaders(400, errorMessage.length());
             responseBody.write(errorMessage.getBytes());
