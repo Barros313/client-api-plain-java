@@ -15,14 +15,25 @@ import java.util.List;
 public class FetchAllHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        // Get instance of client operations
-        ClientOperations op = new ClientOperations();
-
-        // Get response body
         OutputStream responseBody = exchange.getResponseBody();
 
+        // Check request method
+        if (!exchange.getRequestMethod().equals("GET")) {
+            String errorMessage = "Bad request";
+            exchange.sendResponseHeaders(400, errorMessage.length());
+            exchange.getResponseHeaders().add("Content-Type", "text/plain");
+            responseBody.write(errorMessage.getBytes());
+
+            responseBody.flush();
+            responseBody.close();
+            return;
+        }
+
+        ClientOperations op = new ClientOperations();
+        ObjectMapper mapper = new ObjectMapper();
+
         // Get list of clients
-        List<Client> clients = null;
+        List<Client> clients;
         try {
             clients = op.getAllClients();
         } catch (SQLException e) {
@@ -85,11 +96,9 @@ public class FetchAllHandler implements HttpHandler {
             return;
         }
 
+
         // Define String Builder to store JSON strings
         StringBuilder bodyPage = new StringBuilder();
-
-        // Write each JSON to bodyPage
-        ObjectMapper mapper = new ObjectMapper();
         for (Client client : clients) {
             bodyPage.append(mapper.writeValueAsString(client)).append("\n");
         }
@@ -102,7 +111,7 @@ public class FetchAllHandler implements HttpHandler {
         responseBody.write(bodyPage.toString().getBytes());
 
         // Print success message to console
-        System.out.println("/clients Success");
+        System.out.println("Fetched all successfully");
 
         // End program
         responseBody.flush();

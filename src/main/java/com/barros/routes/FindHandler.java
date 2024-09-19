@@ -7,7 +7,6 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.sql.SQLException;
@@ -15,6 +14,22 @@ import java.sql.SQLException;
 public class FindHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
+        OutputStream responseBody = exchange.getResponseBody();
+
+        // Check request method
+        if (!exchange.getRequestMethod().equals("GET")) {
+            String errorMessage = "Bad request";
+            exchange.sendResponseHeaders(400, errorMessage.length());
+            exchange.getResponseHeaders().add("Content-Type", "text/plain");
+            responseBody.write(errorMessage.getBytes());
+
+            responseBody.flush();
+            responseBody.close();
+            return;
+        }
+
+        ClientOperations op = new ClientOperations();
+        ObjectMapper mapper = new ObjectMapper();
 
         // Get request path
         URI requestURI = exchange.getRequestURI();
@@ -23,10 +38,7 @@ public class FindHandler implements HttpHandler {
         // Split path parts
         String[] pathParts = path.split("/");
 
-        // Set output body
-        OutputStream responseBody = exchange.getResponseBody();
-
-        // Get client Id through path part
+        // Get client id through path part
         int clientId;
         try {
             // Get integer from url path
@@ -51,11 +63,8 @@ public class FindHandler implements HttpHandler {
             return;
         }
 
-        // Get client operations
-        ClientOperations op = new ClientOperations();
-        Client client;
-
         // Get client
+        Client client;
         try {
             // Get client
             client = op.getClient(clientId);
@@ -100,18 +109,13 @@ public class FindHandler implements HttpHandler {
             return;
         }
 
-        // Convert to JSON string
-        ObjectMapper mapper = new ObjectMapper();
+        // Write to body
         String response = mapper.writeValueAsString(client);
-
-        // Set status code and response length
         exchange.getResponseHeaders().add("Content-Type", "application/json");
         exchange.sendResponseHeaders(200, response.length());
-
-        // Write to body
         responseBody.write(response.getBytes());
 
-        // Finish
+        // End
         responseBody.flush();
         responseBody.close();
     }

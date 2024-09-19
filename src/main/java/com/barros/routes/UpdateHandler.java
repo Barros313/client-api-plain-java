@@ -18,6 +18,19 @@ public class UpdateHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         OutputStream responseBody = exchange.getResponseBody();
+
+        // Check request method
+        if (!exchange.getRequestMethod().equals("PUT")) {
+            String errorMessage = "Bad request";
+            exchange.sendResponseHeaders(400, errorMessage.length());
+            exchange.getResponseHeaders().add("Content-Type", "text/plain");
+            responseBody.write(errorMessage.getBytes());
+
+            responseBody.flush();
+            responseBody.close();
+            return;
+        }
+
         InputStream requestBody = exchange.getRequestBody();
         ObjectMapper mapper = new ObjectMapper();
         Scanner scanner = new Scanner(requestBody);
