@@ -3,7 +3,6 @@ package com.barros.routes;
 import com.barros.models.Client;
 import com.barros.view.ClientOperations;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
