@@ -15,6 +15,7 @@ public class Server {
         server.createContext("/find", new FindHandler());
         server.createContext("/register", new RegisterHandler());
         server.createContext("/update", new UpdateHandler());
+        server.createContext("/delete", new DeleteHandler());
 
         server.setExecutor(null);
         server.start();
